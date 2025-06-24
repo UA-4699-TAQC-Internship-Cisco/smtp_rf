@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot rpa="false" generated="20250624 11:36:59.177" generator="Robot 3.1.2 (Python 2.7.18 on win32)">
+<suite source="D:\smtp_rf\tests\test_connection_to_smtp.robot" id="s1" name="Test Connection To Smtp">
+<kw type="setup" name="Load Environment Variables" library="get_env">
+<kw name="Get Environment Variable" library="OperatingSystem">
+<doc>Returns the value of an environment variable with the given name.</doc>
+<arguments>
+<arg>HOSTNAME</arg>
+</arguments>
+<assign>
+<var>${HOST}</var>
+</assign>
+<msg timestamp="20250624 11:36:59.189" level="FAIL">Environment variable 'HOSTNAME' does not exist.</msg>
+<status status="FAIL" endtime="20250624 11:36:59.189" starttime="20250624 11:36:59.189"></status>
+</kw>
+<status status="FAIL" endtime="20250624 11:36:59.189" starttime="20250624 11:36:59.189"></status>
+</kw>
+<test id="s1-t1" name="Test SMTP Connection TC001">
+<status status="FAIL" endtime="20250624 11:36:59.189" critical="yes" starttime="20250624 11:36:59.189">Parent suite setup failed:
+Environment variable 'HOSTNAME' does not exist.</status>
+</test>
+<status status="FAIL" endtime="20250624 11:36:59.189" starttime="20250624 11:36:59.177">Suite setup failed:
+Environment variable 'HOSTNAME' does not exist.</status>
+</suite>
+<statistics>
+<total>
+<stat fail="1" pass="0">Critical Tests</stat>
+<stat fail="1" pass="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat fail="1" id="s1" name="Test Connection To Smtp" pass="0">Test Connection To Smtp</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
