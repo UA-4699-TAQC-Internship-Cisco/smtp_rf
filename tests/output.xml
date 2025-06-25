@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot rpa="false" generated="20250624 11:36:59.177" generator="Robot 3.1.2 (Python 2.7.18 on win32)">
+<robot rpa="false" generated="20250625 10:21:04.654" generator="Robot 3.1.2 (Python 2.7.18 on win32)">
 <suite source="D:\smtp_rf\tests\test_connection_to_smtp.robot" id="s1" name="Test Connection To Smtp">
-<kw type="setup" name="Load Environment Variables" library="get_env">
+<test id="s1-t1" name="Test SMTP Connection TC001">
+<kw type="setup" name="Open Connection To SMTP" library="resource">
+<kw name="Load Environment Variables" library="get_env">
+<kw name="Load Envs" library="load_env">
+<status status="PASS" endtime="20250625 10:21:04.769" starttime="20250625 10:21:04.768"></status>
+</kw>
 <kw name="Get Environment Variable" library="OperatingSystem">
 <doc>Returns the value of an environment variable with the given name.</doc>
 <arguments>
@@ -10,27 +15,290 @@
 <assign>
 <var>${HOST}</var>
 </assign>
-<msg timestamp="20250624 11:36:59.189" level="FAIL">Environment variable 'HOSTNAME' does not exist.</msg>
-<status status="FAIL" endtime="20250624 11:36:59.189" starttime="20250624 11:36:59.189"></status>
+<msg timestamp="20250625 10:21:04.769" level="INFO">${HOST} = 192.168.1.43</msg>
+<status status="PASS" endtime="20250625 10:21:04.769" starttime="20250625 10:21:04.769"></status>
 </kw>
-<status status="FAIL" endtime="20250624 11:36:59.189" starttime="20250624 11:36:59.189"></status>
+<kw name="Get Environment Variable" library="OperatingSystem">
+<doc>Returns the value of an environment variable with the given name.</doc>
+<arguments>
+<arg>SMTP_PORT</arg>
+</arguments>
+<assign>
+<var>${PORT}</var>
+</assign>
+<msg timestamp="20250625 10:21:04.769" level="INFO">${PORT} = 25</msg>
+<status status="PASS" endtime="20250625 10:21:04.769" starttime="20250625 10:21:04.769"></status>
 </kw>
-<test id="s1-t1" name="Test SMTP Connection TC001">
-<status status="FAIL" endtime="20250624 11:36:59.189" critical="yes" starttime="20250624 11:36:59.189">Parent suite setup failed:
-Environment variable 'HOSTNAME' does not exist.</status>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>int(${PORT})</arg>
+</arguments>
+<assign>
+<var>${PORT_INT}</var>
+</assign>
+<msg timestamp="20250625 10:21:04.770" level="INFO">${PORT_INT} = 25</msg>
+<status status="PASS" endtime="20250625 10:21:04.770" starttime="20250625 10:21:04.770"></status>
+</kw>
+<kw name="Get Environment Variable" library="OperatingSystem">
+<doc>Returns the value of an environment variable with the given name.</doc>
+<arguments>
+<arg>SSH_USERNAME</arg>
+</arguments>
+<assign>
+<var>${USER}</var>
+</assign>
+<msg timestamp="20250625 10:21:04.770" level="INFO">${USER} = user1</msg>
+<status status="PASS" endtime="20250625 10:21:04.770" starttime="20250625 10:21:04.770"></status>
+</kw>
+<kw name="Get Environment Variable" library="OperatingSystem">
+<doc>Returns the value of an environment variable with the given name.</doc>
+<arguments>
+<arg>PASSWORD</arg>
+</arguments>
+<assign>
+<var>${PASS}</var>
+</assign>
+<msg timestamp="20250625 10:21:04.770" level="INFO">${PASS} = Test12345</msg>
+<status status="PASS" endtime="20250625 10:21:04.770" starttime="20250625 10:21:04.770"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>Loaded host: ${HOST}</arg>
+</arguments>
+<msg timestamp="20250625 10:21:04.770" level="INFO">Loaded host: 192.168.1.43</msg>
+<status status="PASS" endtime="20250625 10:21:04.770" starttime="20250625 10:21:04.770"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>Port: ${PORT_INT}</arg>
+</arguments>
+<msg timestamp="20250625 10:21:04.771" level="INFO">Port: 25</msg>
+<status status="PASS" endtime="20250625 10:21:04.771" starttime="20250625 10:21:04.771"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${HOST}</arg>
+</arguments>
+<msg timestamp="20250625 10:21:04.771" level="INFO">${HOST} = 192.168.1.43</msg>
+<status status="PASS" endtime="20250625 10:21:04.771" starttime="20250625 10:21:04.771"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${PORT_INT}</arg>
+</arguments>
+<msg timestamp="20250625 10:21:04.771" level="INFO">${PORT_INT} = 25</msg>
+<status status="PASS" endtime="20250625 10:21:04.771" starttime="20250625 10:21:04.771"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${USER}</arg>
+</arguments>
+<msg timestamp="20250625 10:21:04.772" level="INFO">${USER} = user1</msg>
+<status status="PASS" endtime="20250625 10:21:04.772" starttime="20250625 10:21:04.771"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${PASS}</arg>
+</arguments>
+<msg timestamp="20250625 10:21:04.772" level="INFO">${PASS} = Test12345</msg>
+<status status="PASS" endtime="20250625 10:21:04.772" starttime="20250625 10:21:04.772"></status>
+</kw>
+<status status="PASS" endtime="20250625 10:21:04.772" starttime="20250625 10:21:04.767"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>Connecting to: ${HOST}:${PORT_INT}</arg>
+</arguments>
+<msg timestamp="20250625 10:21:04.772" level="INFO">Connecting to: 192.168.1.43:25</msg>
+<status status="PASS" endtime="20250625 10:21:04.772" starttime="20250625 10:21:04.772"></status>
+</kw>
+<kw name="Open Connection" library="SSHLibrary">
+<doc>Opens a new SSH connection to the given ``host`` and ``port``.</doc>
+<arguments>
+<arg>${HOST}</arg>
+<arg>22</arg>
+</arguments>
+<status status="PASS" endtime="20250625 10:21:04.772" starttime="20250625 10:21:04.772"></status>
+</kw>
+<kw name="Login" library="SSHLibrary">
+<doc>Logs into the SSH server with the given ``username`` and ``password``.</doc>
+<arguments>
+<arg>${USER}</arg>
+<arg>${PASS}</arg>
+</arguments>
+<msg timestamp="20250625 10:21:04.773" level="INFO">Logging into '192.168.1.43:22' as 'user1'.</msg>
+<msg timestamp="20250625 10:21:06.401" level="INFO">Read output: Warning: your password will expire in 0 days.
+Last login: Wed Jun 25 10:16:39 2025 from 192.168.1.197
+[?2004h[user1@localhost ~]$</msg>
+<status status="PASS" endtime="20250625 10:21:06.401" starttime="20250625 10:21:04.772"></status>
+</kw>
+<status status="PASS" endtime="20250625 10:21:06.401" starttime="20250625 10:21:04.767"></status>
+</kw>
+<kw name="Load Environment Variables" library="get_env">
+<kw name="Load Envs" library="load_env">
+<status status="PASS" endtime="20250625 10:21:06.404" starttime="20250625 10:21:06.403"></status>
+</kw>
+<kw name="Get Environment Variable" library="OperatingSystem">
+<doc>Returns the value of an environment variable with the given name.</doc>
+<arguments>
+<arg>HOSTNAME</arg>
+</arguments>
+<assign>
+<var>${HOST}</var>
+</assign>
+<msg timestamp="20250625 10:21:06.404" level="INFO">${HOST} = 192.168.1.43</msg>
+<status status="PASS" endtime="20250625 10:21:06.404" starttime="20250625 10:21:06.404"></status>
+</kw>
+<kw name="Get Environment Variable" library="OperatingSystem">
+<doc>Returns the value of an environment variable with the given name.</doc>
+<arguments>
+<arg>SMTP_PORT</arg>
+</arguments>
+<assign>
+<var>${PORT}</var>
+</assign>
+<msg timestamp="20250625 10:21:06.405" level="INFO">${PORT} = 25</msg>
+<status status="PASS" endtime="20250625 10:21:06.405" starttime="20250625 10:21:06.404"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>int(${PORT})</arg>
+</arguments>
+<assign>
+<var>${PORT_INT}</var>
+</assign>
+<msg timestamp="20250625 10:21:06.405" level="INFO">${PORT_INT} = 25</msg>
+<status status="PASS" endtime="20250625 10:21:06.405" starttime="20250625 10:21:06.405"></status>
+</kw>
+<kw name="Get Environment Variable" library="OperatingSystem">
+<doc>Returns the value of an environment variable with the given name.</doc>
+<arguments>
+<arg>SSH_USERNAME</arg>
+</arguments>
+<assign>
+<var>${USER}</var>
+</assign>
+<msg timestamp="20250625 10:21:06.405" level="INFO">${USER} = user1</msg>
+<status status="PASS" endtime="20250625 10:21:06.405" starttime="20250625 10:21:06.405"></status>
+</kw>
+<kw name="Get Environment Variable" library="OperatingSystem">
+<doc>Returns the value of an environment variable with the given name.</doc>
+<arguments>
+<arg>PASSWORD</arg>
+</arguments>
+<assign>
+<var>${PASS}</var>
+</assign>
+<msg timestamp="20250625 10:21:06.405" level="INFO">${PASS} = Test12345</msg>
+<status status="PASS" endtime="20250625 10:21:06.405" starttime="20250625 10:21:06.405"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>Loaded host: ${HOST}</arg>
+</arguments>
+<msg timestamp="20250625 10:21:06.406" level="INFO">Loaded host: 192.168.1.43</msg>
+<status status="PASS" endtime="20250625 10:21:06.406" starttime="20250625 10:21:06.406"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>Port: ${PORT_INT}</arg>
+</arguments>
+<msg timestamp="20250625 10:21:06.406" level="INFO">Port: 25</msg>
+<status status="PASS" endtime="20250625 10:21:06.406" starttime="20250625 10:21:06.406"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${HOST}</arg>
+</arguments>
+<msg timestamp="20250625 10:21:06.406" level="INFO">${HOST} = 192.168.1.43</msg>
+<status status="PASS" endtime="20250625 10:21:06.406" starttime="20250625 10:21:06.406"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${PORT_INT}</arg>
+</arguments>
+<msg timestamp="20250625 10:21:06.406" level="INFO">${PORT_INT} = 25</msg>
+<status status="PASS" endtime="20250625 10:21:06.406" starttime="20250625 10:21:06.406"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${USER}</arg>
+</arguments>
+<msg timestamp="20250625 10:21:06.407" level="INFO">${USER} = user1</msg>
+<status status="PASS" endtime="20250625 10:21:06.407" starttime="20250625 10:21:06.407"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${PASS}</arg>
+</arguments>
+<msg timestamp="20250625 10:21:06.407" level="INFO">${PASS} = Test12345</msg>
+<status status="PASS" endtime="20250625 10:21:06.407" starttime="20250625 10:21:06.407"></status>
+</kw>
+<status status="PASS" endtime="20250625 10:21:06.407" starttime="20250625 10:21:06.403"></status>
+</kw>
+<kw name="Execute Command" library="SSHLibrary">
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<arguments>
+<arg>echo | nc ${HOST} ${PORT_INT}</arg>
+</arguments>
+<assign>
+<var>${output}</var>
+</assign>
+<msg timestamp="20250625 10:21:06.407" level="INFO">Executing command 'echo | nc 192.168.1.43 25'.</msg>
+<msg timestamp="20250625 10:21:06.691" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20250625 10:21:06.691" level="INFO">${output} = 220 localhost.localdomain ESMTP Postfix
+500 5.5.2 Error: bad syntax</msg>
+<status status="PASS" endtime="20250625 10:21:06.691" starttime="20250625 10:21:06.407"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${output}</arg>
+</arguments>
+<msg timestamp="20250625 10:21:06.692" level="INFO">220 localhost.localdomain ESMTP Postfix
+500 5.5.2 Error: bad syntax</msg>
+<status status="PASS" endtime="20250625 10:21:06.692" starttime="20250625 10:21:06.691"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${output}</arg>
+<arg>220</arg>
+</arguments>
+<status status="PASS" endtime="20250625 10:21:06.692" starttime="20250625 10:21:06.692"></status>
+</kw>
+<kw type="teardown" name="Close Connection" library="SSHLibrary">
+<doc>Closes the current connection.</doc>
+<status status="PASS" endtime="20250625 10:21:06.761" starttime="20250625 10:21:06.692"></status>
+</kw>
+<status status="PASS" endtime="20250625 10:21:06.761" critical="yes" starttime="20250625 10:21:04.766"></status>
 </test>
-<status status="FAIL" endtime="20250624 11:36:59.189" starttime="20250624 11:36:59.177">Suite setup failed:
-Environment variable 'HOSTNAME' does not exist.</status>
+<status status="PASS" endtime="20250625 10:21:06.762" starttime="20250625 10:21:04.655"></status>
 </suite>
 <statistics>
 <total>
-<stat fail="1" pass="0">Critical Tests</stat>
-<stat fail="1" pass="0">All Tests</stat>
+<stat fail="0" pass="1">Critical Tests</stat>
+<stat fail="0" pass="1">All Tests</stat>
 </total>
 <tag>
 </tag>
 <suite>
-<stat fail="1" id="s1" name="Test Connection To Smtp" pass="0">Test Connection To Smtp</stat>
+<stat fail="0" id="s1" name="Test Connection To Smtp" pass="1">Test Connection To Smtp</stat>
 </suite>
 </statistics>
 <errors>

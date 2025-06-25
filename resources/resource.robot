@@ -1,10 +1,13 @@
 *** Settings ***
 Resource    get_env.robot
-Library     Telnet
+Library     SSHLibrary
 
 *** Keywords ***
 Open Connection To SMTP
-     Open Connection    ${HOST}    ${PORT_INT}
+     Load Environment Variables
+     Log    Connecting to: ${HOST}:${PORT_INT}
+     Open Connection    ${HOST}    22
+     Login    ${USER}    ${PASS}
 
 
 Close Connection With SMTP
