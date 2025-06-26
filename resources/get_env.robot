@@ -13,6 +13,9 @@ Load Environment Variables
     ${USER}=    Get Environment Variable    SSH_USERNAME
     ${PASS}=    Get Environment Variable    PASSWORD
     ${TCP_TIMEOUT}=    Get Environment Variable    TCP_TIMEOUT
+    ${SENDER}=    Get Environment Variable    LOCAL_SENDER
+    ${RECIPIENT}=    Get Environment Variable    REMOTE_RECIPIENT
+    ${SUBJECT}=    Get Environment Variable    EMAIL_SUBJECT
 
     Log    Loaded host: ${HOST}
     Log    Port: ${PORT_INT}
@@ -23,6 +26,9 @@ Load Environment Variables
     Set Suite Variable    ${TCP_TIMEOUT}
     Set Suite Variable    ${USER}
     Set Suite Variable    ${PASS}
+    Set Suite Variable    ${SENDER}
+    Set Suite Variable    ${RECIPIENT}
+    Set Suite Variable    ${SUBJECT}
 
 
 
