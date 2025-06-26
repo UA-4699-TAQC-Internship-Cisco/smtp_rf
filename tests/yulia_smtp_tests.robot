@@ -5,6 +5,7 @@ Resource   ../resources/yulia_smtp_keywords.robot
 
 *** Test Cases ***
 Connection To Invalid Port
+    Load Environment Variables
     ${server_ip}=    Get Environment Variable    SERVER_IP
     ${wrong_port}=    Get Environment Variable    WRONG_PORT
     ${tcp_timeout}=    Get Environment Variable    TCP_TIMEOUT
