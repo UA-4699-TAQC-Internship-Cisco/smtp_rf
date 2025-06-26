@@ -1,12 +1,8 @@
-import os
 import socket
-
-import dotenv
 
 from config.logger_config import setup_logger
 
-dotenv.load_dotenv()
-logger = setup_logger()
+logger = setup_logger(test_name="WrongPortTest")
 
 
 def connect_to_invalid_port(host, port, timeout=5):
@@ -21,4 +17,3 @@ def connect_to_invalid_port(host, port, timeout=5):
     except Exception as e:
         logger.warn("TCP connection failed: %s" % str(e))
         return "CONNECTION_FAILED"
-
