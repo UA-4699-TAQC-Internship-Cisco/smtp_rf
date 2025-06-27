@@ -7,10 +7,10 @@ Test Teardown   Close Connection
 
 
 *** Variables ***
-${FROM}       root@localhost
+${FROM}       test@@123
 ${TO}         user1@localhost
-${SUBJECT}    Test without to/from1
-${BODY}       Test without to/from1
+${SUBJECT}    Send email with invalid format
+${BODY}       Have you received it?)
 
 
 
@@ -19,13 +19,14 @@ Test Send Basic Mail TC011
     Load Environment Variables
 
     ${output}=    Send Mail
+    ...           EHLO example.com
     ...           ${FROM}
     ...           ${TO}
     ...           ${SUBJECT}
     ...           ${BODY}
 
+    Should Contain    ${output}    501
 
-    Should Contain    ${output}    250
-    Should Contain    ${output}    354
-
-
+    Should Not Contain    ${output}    250 2.1.0
+    Should Not Contain    ${output}    250 2.1.5
+    Should Not Contain    ${output}    354
