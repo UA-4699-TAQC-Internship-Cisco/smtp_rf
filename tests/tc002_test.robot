@@ -19,7 +19,7 @@ Test TCP connectivity
     Should Contain    ${connection_result}    Connected to ${HOST}:${SMTP_PORT}
 
 Send EHLO With Netcat
-    ${cmd_ehlo}=    Set Variable    echo -e "EHLO ${HOST}\r\n" | nc ${HOST} 587
+    ${cmd_ehlo}=    Set Variable    echo -e "EHLO ${HOST}\r\n" | nc ${HOST} ${SMTP_PORT}
     ${ehlo_result}=   Execute Command    ${cmd_ehlo}
     Log To Console      EHLO Output:\n${ehlo_result}
     Should Contain      ${ehlo_result}    250
