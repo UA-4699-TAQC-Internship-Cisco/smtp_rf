@@ -22,3 +22,4 @@ singledispatch==3.7.0
 six==1.17.0
 typing==3.10.0.0
 wrapt==1.15.0
+robotframework-sshlibrary==3.8.0
