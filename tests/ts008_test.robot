@@ -5,7 +5,7 @@ Resource    ../resources/get_env.robot
 
 
 *** Variables ***
-${AUTH_STRING}       AUTH PLAIN AGludmFsaWRfdXNlcgB3cm9uZ19wYXNz
+${AUTH_STRING}       AGludmFsaWRfdXNlcgB3cm9uZ19wYXNz
 
 
 *** Test Cases ***
@@ -19,10 +19,9 @@ Send the EHLO example.com command
     ${rc}    ${ehlo_result}=    Run And Return Rc And Output    ${cmd}
     Should Contain    ${ehlo_result}    250
 Attempt AUTH PLAIN or AUTH LOGIN, provide incorrect (invalid) credentials
-    ${inv_data_cmd}=    Set Variable
-    ...    bash -c "(echo -e 'EHLO test.com\r'; sleep 1; echo -e '${AUTH_STRING}\r'; sleep 1; echo -e 'QUIT\r') | openssl s_client -starttls smtp -connect ${HOST}:${PORT_INT} -crlf"
-    ${rc}    ${ehlo_result}=    Run And Return Rc And Output    ${inv_data_cmd}
-    Should Contain    ${ehlo_result}    535 5.7.8
+    ${inv_data_cmd}=    Set Variable    echo -e "AUTH LOGIN ${AUTH_STRING}\r\n" | nc ${HOST} ${PORT_INT}
+    ${auth_result}=    Execute Command    ${inv_data_cmd}
+    Should Contain    ${auth_result}    503 5.5.1
 
     Close Connection
 
