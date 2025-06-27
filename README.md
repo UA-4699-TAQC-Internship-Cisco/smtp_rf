@@ -3,4 +3,8 @@
 
 
 
-<!--include:./test_cases.md-->
+## run all test
+
+```shell
+robot --outputdir  results .
+```
