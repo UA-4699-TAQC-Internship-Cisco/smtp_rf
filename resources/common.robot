@@ -1,6 +1,6 @@
 *** Settings ***
 Library    OperatingSystem
-Resource    ..\isssaq_smtp.py
+Library     ../../libraries/isssaq_smtp.py
 
 *** Keywords ***
 Connect Smtp Server
@@ -27,3 +27,8 @@ Open Recent Mail
     [Arguments]    ${HOST}    ${username}    ${password}
     ${RECEIVED_MAIL}    Read Recent Mail    ${username}    ${password}    ${HOST}
     [Return]    ${RECEIVED_MAIL}
+    
+Send Quit Command
+    [Arguments]    ${SMTP_SRV}
+    @{RESPONSE_MSG}=    Make Quit    ${SMTP_SRV}
+    [Return]    @{RESPONSE_MSG}
