@@ -1,6 +1,6 @@
 import smtplib
 import socket
-
+from robot.api.deco import keyword
 from config.logger_config import setup_logger
 
 
@@ -42,10 +42,8 @@ def send_email_headers_only(sender, recipient, subject, server_ip, server_port):
 
 
 def send_data_without_rcpt(sender, server_ip, server_port):
-    """
-    Try to send DATA command without specifying RCPT TO.
-    Expect the server to reject the request.
-    """
+    """ Try to send DATA command without specifying RCPT TO.
+    Expect the server to reject the request."""
     logger = setup_logger(test_name="SendDataWithoutRcptTest")
     try:
         logger.info("Connecting to SMTP server %s:%s" % (server_ip, server_port))
@@ -69,3 +67,22 @@ def send_data_without_rcpt(sender, server_ip, server_port):
     except Exception as e:
         logger.error("General error: %s" % str(e))
         return "SEND_FAILED"
+
+
+def check_helo_response(server_ip, server_port):
+    """Send HELO command and verify server responds with code 250."""
+    logger = setup_logger(test_name="HeloResponseTest")
+    try:
+        logger.info("Connecting to SMTP server %s:%s" % (server_ip, server_port))
+        server = smtplib.SMTP(server_ip, server_port)
+        code, response = server.helo("example.com")
+        server.quit()
+
+        logger.info("HELO response: %s %s" % (code, response))
+        if code == 250:
+            return "HELO_OK"
+        else:
+            return "HELO_FAILED"
+    except Exception as e:
+        logger.error("HELO command failed: %s" % str(e))
+        return "HELO_ERROR"
