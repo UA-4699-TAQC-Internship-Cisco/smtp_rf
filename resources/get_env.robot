@@ -11,7 +11,7 @@ Load Environment Variables
     ${WRONG_PORT}=    Get Environment Variable    WRONG_PORT
     ${WRONG_PORT_INT}=  Evaluate    int(${WRONG_PORT})
     ${USER}=    Get Environment Variable    SSH_USERNAME
-    ${PASS}=    Get Environment Variable    PASSWORD
+    ${PASS}=    Get Environment Variable    SSH_PASSWORD
     ${TCP_TIMEOUT}=    Get Environment Variable    TCP_TIMEOUT
     ${SENDER}=    Get Environment Variable    LOCAL_SENDER
     ${RECIPIENT}=    Get Environment Variable    REMOTE_RECIPIENT
