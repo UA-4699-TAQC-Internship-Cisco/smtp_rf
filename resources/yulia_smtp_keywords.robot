@@ -14,6 +14,12 @@ Send Email With Headers Only
     [Return]    ${result}
 
 Send Data Without Rcpt To
-    [Arguments]    ${sender}    ${server_ip}    ${server_port}
-    ${result}=    Send Data Without Rcpt    ${sender}    ${server_ip}    ${server_port}
+    [Arguments]    ${SENDER}    ${HOST}    ${PORT_INT}
+    ${result}=    Send Data Without Rcpt    ${SENDER}   ${HOST}    ${PORT_INT}
     [Return]    ${result}
+
+Check HELO Command Response
+    [Arguments]    ${HOST}    ${PORT_INT}
+    ${result}=    Check Helo Response    ${HOST}    ${PORT_INT}
+    [Return]    ${result}
+

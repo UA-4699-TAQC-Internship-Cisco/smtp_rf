@@ -42,10 +42,8 @@ def send_email_headers_only(sender, recipient, subject, server_ip, server_port):
 
 
 def send_data_without_rcpt(sender, server_ip, server_port):
-    """
-    Try to send DATA command without specifying RCPT TO.
-    Expect the server to reject the request.
-    """
+    """ Try to send DATA command without specifying RCPT TO.
+    Expect the server to reject the request."""
     logger = setup_logger(test_name="SendDataWithoutRcptTest")
     try:
         logger.info("Connecting to SMTP server %s:%s" % (server_ip, server_port))
@@ -69,3 +67,32 @@ def send_data_without_rcpt(sender, server_ip, server_port):
     except Exception as e:
         logger.error("General error: %s" % str(e))
         return "SEND_FAILED"
+
+
+def check_helo_response(server_ip, server_port):
+    """Send HELO command and verify server responds with code 250."""
+    logger = setup_logger(test_name="HeloResponseTest")
+    try:
+        logger.info("Connecting to %s:%s" % (server_ip, server_port))
+        set_socket = socket.create_connection((server_ip, int(server_port)), timeout=5)
+
+        response = set_socket.recv(1024).decode('utf-8')
+        logger.info("Server greeting: %s" % response.strip())
+
+        helo_command = "HELO example.com\r\n"
+        logger.info("Sending: %s" % helo_command.strip())
+        set_socket.sendall(helo_command.encode('utf-8'))
+
+        helo_response = set_socket.recv(1024).decode('utf-8').strip()
+        logger.info("HELO response: %s" % helo_response)
+
+        set_socket.close()
+
+        if helo_response.startswith("250"):
+            return "HELO_OK"
+        else:
+            return "HELO_FAILED: %s" % helo_response
+
+    except Exception as e:
+        logger.error("Error during HELO check: %s" % str(e))
+        return "ERROR: %s" % str(e)

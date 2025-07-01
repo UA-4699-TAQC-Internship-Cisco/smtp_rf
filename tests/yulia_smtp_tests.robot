@@ -22,3 +22,9 @@ Sending DATA Without RCPT TO
     [Documentation]    Verify that DATA is rejected if no RCPT TO command was sent.
     ${result}=    Send Data Without Rcpt To    ${SENDER}    ${HOST}    ${PORT_INT}
     Should Be Equal As Strings    ${result}    REJECTED
+
+HELO Command Response
+    Load Environment Variables
+    [Documentation]    Verify server responds with 250 greeting to HELO command.
+    ${result}=    Check HELO Command Response    ${HOST}    ${PORT_INT}
+    Should Be Equal As Strings    ${result}    HELO_OK
