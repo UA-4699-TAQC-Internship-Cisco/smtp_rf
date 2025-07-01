@@ -61,5 +61,5 @@ NON_EXISTING_RECIPIENT='' # non existing email addr.
 ## Run test
 
 ```shell
- robot --pythonpath . tests
+ robot --pythonpath . --outputdir  results . tests
 ```
