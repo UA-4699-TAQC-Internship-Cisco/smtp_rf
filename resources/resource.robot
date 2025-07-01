@@ -32,3 +32,5 @@ Send Mail
     ${output}=    SSHLibrary.Execute Command    echo -e "${mail_commands}" \| nc ${HOST} ${PORT_INT}
     Log    ${output}
     [Return]    ${output}
+
+

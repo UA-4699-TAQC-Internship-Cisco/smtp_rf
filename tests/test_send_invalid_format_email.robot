@@ -15,7 +15,7 @@ ${BODY}       Have you received it?)
 
 
 *** Test Cases ***
-Test Send Basic Mail TC011
+Test Send Basic Mail Invalid Format TC016
     Load Environment Variables
 
     ${output}=    Send Mail
