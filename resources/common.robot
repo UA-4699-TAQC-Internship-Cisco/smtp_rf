@@ -1,6 +1,6 @@
 *** Settings ***
 Library    OperatingSystem
-Library     ../../libraries/isssaq_smtp.py
+Library     ../libraries/isssaq_smtp.py
 
 *** Keywords ***
 Connect Smtp Server
@@ -24,11 +24,16 @@ Send Message Via Host
     Send Message Smtp    ${FROM_ADDR}    ${TO_ADDR}    ${MESSAGE}    ${SMTP_SRV}
 
 Open Recent Mail
-    [Arguments]    ${HOST}    ${username}    ${password}
-    ${RECEIVED_MAIL}    Read Recent Mail    ${username}    ${password}    ${HOST}
+    [Arguments]    ${HOST}    ${USER}    ${PASS}
+    ${RECEIVED_MAIL}    Read Recent Mail    ${USER}    ${PASS}    ${HOST}
     [Return]    ${RECEIVED_MAIL}
     
 Send Quit Command
     [Arguments]    ${SMTP_SRV}
     @{RESPONSE_MSG}=    Make Quit    ${SMTP_SRV}
     [Return]    @{RESPONSE_MSG}
+    
+Form A Letter For Sending
+    [Arguments]    ${message}    ${FROM_ADDR}    ${TO_ADDR}    ${SUBJ}='Test message1'
+    ${LETTER_UTF8}=    Form Letter With Utf8    ${message}    ${FROM_ADDR}    ${TO_ADDR}    ${SUBJ}
+    [Return]    ${LETTER_UTF8}
