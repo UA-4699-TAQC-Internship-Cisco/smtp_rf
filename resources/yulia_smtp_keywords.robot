@@ -12,3 +12,8 @@ Send Email With Headers Only
     [Arguments]    ${SENDER}    ${RECIPIENT}    ${SUBJECT}    ${HOST}    ${PORT_INT}
     ${result}=    Send Email Headers Only    ${SENDER}    ${RECIPIENT}    ${SUBJECT}    ${HOST}    ${PORT_INT}
     [Return]    ${result}
+
+Send Data Without Rcpt To
+    [Arguments]    ${sender}    ${server_ip}    ${server_port}
+    ${result}=    Send Data Without Rcpt    ${sender}    ${server_ip}    ${server_port}
+    [Return]    ${result}
