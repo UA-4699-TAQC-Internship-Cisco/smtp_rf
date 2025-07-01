@@ -33,29 +33,19 @@ pip install -r requirements.txt
 
 create in root file `.env`
 ```properties
-# SHH CONNECTION
-
 HOSTNAME='your_server_ip'
+TCP_TIMEOUT=5
+
 SSH_PORT='your_ssh_port'
 SSH_USERNAME='your_ssh_username'
 SSH_PASSWORD='your_ssh_password'
-EMAIL_DIR='/var/spool/mail/your_email_username'
 
-# CONNECTION WITH REMOTE CENTOS
+DOMAIN='' # domain part in addr user@{domain}
+SMTP_PORT='your_smtp_port'
+EMAIL_DIR='/var/spool/mail/your_email_username'
 
 LOCAL_SENDER='python@localhost'
 REMOTE_RECIPIENT='your_email@localhost'
-SERVER_IP=HOSTNAME
-SMTP_PORT='your_smtp_port'
-WRONG_PORT='your_wrong_port'
-TCP_TIMEOUT=5
-
-# EMAIL_TEXT
-EMAIL_SUBJECT='Test last email'
-EMAIL_BODY='Hello! Here I am'
-DOMAIN='' # domain part in addr user@{domain}
-NON_EXISTING_RECIPIENT='' # non existing email addr.
-
 ```
 
 ## Run test

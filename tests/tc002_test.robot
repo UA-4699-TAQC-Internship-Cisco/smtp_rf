@@ -1,7 +1,7 @@
 *** Settings ***
 Library    SSHLibrary
 Library    OperatingSystem
-Resource    ../resources/get_env.robot
+Resource    resources/get_env.robot
 
 
 *** Variables ***

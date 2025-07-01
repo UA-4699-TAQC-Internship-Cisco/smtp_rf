@@ -1,7 +1,7 @@
 *** Settings ***
-Library    ../libraries/yulia_smtp_library.py
-Resource   ../resources/yulia_smtp_keywords.robot
-Resource   ../resources/get_env.robot
+Library    libraries/yulia_smtp_library.py
+Resource   resources/yulia_smtp_keywords.robot
+Resource   resources/get_env.robot
 
 *** Test Cases ***
 Connection To Invalid Port

@@ -1,6 +1,6 @@
 *** Settings ***
-Resource    ../resources/get_env.robot
-Resource    ../resources/common.robot
+Resource    resources/get_env.robot
+Resource    resources/common.robot
 Library    String
 
 *** Variables ***
