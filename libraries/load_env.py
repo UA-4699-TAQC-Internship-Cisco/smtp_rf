@@ -1,5 +1,4 @@
 from dotenv import load_dotenv
-import os
 from robot.api.deco import keyword
 
 @keyword
