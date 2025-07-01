@@ -1,6 +1,6 @@
 import smtplib
 import socket
-from robot.api.deco import keyword
+
 from config.logger_config import setup_logger
 
 
@@ -73,16 +73,26 @@ def check_helo_response(server_ip, server_port):
     """Send HELO command and verify server responds with code 250."""
     logger = setup_logger(test_name="HeloResponseTest")
     try:
-        logger.info("Connecting to SMTP server %s:%s" % (server_ip, server_port))
-        server = smtplib.SMTP(server_ip, server_port)
-        code, response = server.helo("example.com")
-        server.quit()
+        logger.info("Connecting to %s:%s" % (server_ip, server_port))
+        set_socket = socket.create_connection((server_ip, int(server_port)), timeout=5)
 
-        logger.info("HELO response: %s %s" % (code, response))
-        if code == 250:
+        response = set_socket.recv(1024).decode('utf-8')
+        logger.info("Server greeting: %s" % response.strip())
+
+        helo_command = "HELO example.com\r\n"
+        logger.info("Sending: %s" % helo_command.strip())
+        set_socket.sendall(helo_command.encode('utf-8'))
+
+        helo_response = set_socket.recv(1024).decode('utf-8').strip()
+        logger.info("HELO response: %s" % helo_response)
+
+        set_socket.close()
+
+        if helo_response.startswith("250"):
             return "HELO_OK"
         else:
-            return "HELO_FAILED"
+            return "HELO_FAILED: %s" % helo_response
+
     except Exception as e:
-        logger.error("HELO command failed: %s" % str(e))
-        return "HELO_ERROR"
+        logger.error("Error during HELO check: %s" % str(e))
+        return "ERROR: %s" % str(e)
