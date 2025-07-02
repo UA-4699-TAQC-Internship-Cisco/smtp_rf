@@ -8,9 +8,6 @@ Resource    ../resources/tb_keywords.robot
 Test Setup      Connect To SMTP And Authenticate
 
 
-*** Variables ***
-${FROM}     tetiana
-
 *** Test Cases ***
 Initiate a mail transaction (MAIL FROM, RCPT TO)
     ${mail_998_result}=    Send Line Of 998 Characters
