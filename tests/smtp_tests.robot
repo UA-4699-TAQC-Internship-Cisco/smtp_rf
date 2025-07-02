@@ -1,6 +1,6 @@
 *** Settings ***
-Resource   ../resources/smtp_keywords.robot
-Resource   ../resources/get_env.robot
+Resource   resources/smtp_keywords.robot
+Resource   resources/get_env.robot
 
 *** Variables ***
 ${SUBJECT}    Test email

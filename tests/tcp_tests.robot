@@ -1,6 +1,6 @@
 *** Settings ***
-Resource   ../resources/tcp_keywords.robot
-Resource   ../resources/get_env.robot
+Resource   resources/tcp_keywords.robot
+Resource   resources/get_env.robot
 
 *** Variables ***
 ${WRONG_PORT_INT}    9999
