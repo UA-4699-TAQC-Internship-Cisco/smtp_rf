@@ -1,6 +1,6 @@
 *** Settings ***
-Library    ../libraries/smtp_library.py
-Resource   ../resources/get_env.robot
+Library    libraries/smtp_library.py
+Resource   resources/get_env.robot
 
 
 *** Keywords ***

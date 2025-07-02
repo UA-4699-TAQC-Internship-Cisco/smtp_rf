@@ -1,6 +1,6 @@
 *** Settings ***
-Library    ../libraries/tcp_library.py
-Resource   ../resources/get_env.robot
+Library    libraries/tcp_library.py
+Resource   resources/get_env.robot
 
 
 *** Keywords ***
