@@ -11,6 +11,10 @@ Connect To SMTP And Authenticate
     Open Connection    ${HOST}
     Login              ${USER}    ${PASS}
 
+Test TCP connectivity
+    ${connection_result}=    Execute Command    nc -vz ${HOST} ${SMTP_PORT} 2>&1
+    [Return]    ${connection_result}
+
 Send Line Of 998 Characters
     ${line_998}=    Evaluate    "A" * 998
     ${cmd}=    Set Variable    echo -e "EHLO ${HOST}\r\n MAIL FROM:<${SENDER}>\r\nRCPT TO:<${USER}>\r\nDATA\r\n${line_998}\r\n.\r\nQUIT\r\n" | nc ${HOST} ${PORT_INT}
@@ -24,6 +28,12 @@ Send Line Of 999 Characters
     [Return]    ${mail_result}
 
 Send EHLO
+    [Arguments]
     ${cmd}=    Set Variable    echo -e "EHLO ${HOST}\r\n" | nc ${HOST} ${PORT_INT}
     ${ehlo_result}=    Execute Command    ${cmd}
     [Return]    ${ehlo_result}
+
+Provide Incorrect AUTH LOGIN
+    ${inv_data_cmd}=    Set Variable    echo -e "AUTH LOGIN ${AUTH_STRING}\r\n" | nc ${HOST} ${PORT_INT}
+    ${auth_result}=    Execute Command    ${inv_data_cmd}
+    [Return]    ${auth_result}
