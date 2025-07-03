@@ -1,6 +1,6 @@
 *** Settings ***
 Library    OperatingSystem
-Library     ../libraries/isssaq_smtp.py
+Library     ../libraries/smtp_library.py
 
 *** Keywords ***
 Connect Smtp Server
@@ -37,3 +37,8 @@ Form A Letter For Sending
     [Arguments]    ${message}    ${FROM_ADDR}    ${TO_ADDR}    ${SUBJ}='Test message1'
     ${LETTER_UTF8}=    Form Letter With Utf8    ${message}    ${FROM_ADDR}    ${TO_ADDR}    ${SUBJ}
     [Return]    ${LETTER_UTF8}
+
+Check Recipient Domain
+    [Arguments]    ${HOST}    ${SMTP_PORT}    ${FROM_ADDR}    ${TO_ADDR}
+    @{RESPONSE}=    Verify Recipient Domain    ${HOST}    ${SMTP_PORT}    ${FROM_ADDR}    ${TO_ADDR}
+    [Return]    @{RESPONSE}

@@ -1,0 +1,13 @@
+*** Settings ***
+Resource    resources/common.robot
+Resource    resources/get_env.robot
+
+*** Variables ***
+${INVALID_RCPT_NAME}=    user@nonexistingdom123.com
+
+*** Test Cases ***
+Handle Non Existing Rcpt Domain
+    Load Environment Variables
+    @{REPLY}=    Check Recipient Domain    ${HOST}    ${PORT_INT}    ${SENDER}    ${INVALID_RCPT_NAME}
+    Should Be Equal    ${REPLY}[0]    ${554}
+    Should Be Equal As Strings    ${REPLY}[1]    5.7.1 <${INVALID_RCPT_NAME}>: Relay access denied

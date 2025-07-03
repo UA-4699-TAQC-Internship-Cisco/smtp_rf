@@ -5,6 +5,7 @@ Library    String
 
 *** Variables ***
 ${message}=    To wiadomość z prośbą o sprawdzenie poprawności tłumaczenia.
+${SUBJECT}=    Test message
 
 *** Test Cases ***
 Send Mail With Utf8
