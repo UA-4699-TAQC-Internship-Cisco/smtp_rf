@@ -1,9 +1,7 @@
 import smtplib
-from cookielib import logger
-from smtplib import SMTPRecipientsRefused, SMTPConnectError
-
 import paramiko
 from email.MIMEText import MIMEText
+
 from config.logger_config import setup_logger
 
 
@@ -62,12 +60,25 @@ def verify_recipient_domain(host, port, sender, recipient):
         smtp_svr = smtplib.SMTP(host, port)
         smtp_svr.mail(sender)
         code, response = smtp_svr.rcpt(recipient)
-        logger.info("Reply code RCPT TO %s: %d, %s" % (recipient, code, response))
-        return code, smtp_svr.data('test message')
-    except SMTPRecipientsRefused:
-        logger.warn("An invalid address for rcpt: %s" % recipient)
-    except SMTPConnectError:
-        logger.warn("Connection to %s is failed. Make sure that assigned port and host are correct" % host)
+        logger.info("Reply"
+                    " code rcpt TO: %d, %s" % ( code, response))
+        if code == 250:
+            try:
+                smtp_svr.data('Test msg')
+            except smtplib.SMTPDataError as e:
+                logger.warn("Not valid recipient: %s" % recipient)
+                smtp_svr.quit()
+                return e.smtp_code, e.message
+        else:
+            smtp_svr.quit()
+            return code, response
+    except smtplib.SMTPRecipientsRefused as e:
+        logger.warn("An invalid address for recipient: %s" % recipient)
+        return e.message
+    except smtplib.SMTPConnectError as e:
+        logger.warn("Connection to %s is failed. Make sure that assigned port and hostname are correct" % host)
+        return e.smtp_code, e.message
+
 
 def validate_hostname(hostname, smtp_srv=smtplib.SMTP()):
     return smtp_srv.docmd('ehlo', hostname)
