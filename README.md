@@ -53,3 +53,58 @@ REMOTE_RECIPIENT='your_email@localhost'
 ```shell
 robot --pythonpath . --outputdir results . tests
 ```
+
+
+## CentOS setup
+
+### Installing Postfix
+Install Postfix on CentOS
+```shell
+sudo yum update -y
+sudo yum install postfix -y
+```
+Run: 
+
+```shell
+sudo systemctl start postfix
+```
+
+or to autostart at system startup:
+```shell
+sudo systemctl enable postfix
+sudo systemctl start postfix
+```
+Status check:
+```shell
+sudo systemctl status postfix
+```
+
+### Configure Postfix to receive data from outside
+Open the Postfix configuration file:
+```shell
+sudo nano /etc/postfix/main.cf
+```
+add the following parameters:
+```text
+inet_interfaces = all
+inet_protocols = ipv4
+mydestination = $myhostname, localhost.$mydomain, localhost
+mynetworks = 127.0.0.0/8, [IP_host]
+```
+restart 
+```shell
+sudo systemctl restart postfix
+```
+#### Open ports:
+
+```shell
+sudo firewall-cmd --add-port=25/tcp --permanent
+sudo firewall-cmd --add-port=587/tcp --permanent
+sudo firewall-cmd --add-port=465/tcp --permanent
+sudo firewall-cmd --reload
+```
+restart 
+```shell
+sudo systemctl restart postfix
+```
+
