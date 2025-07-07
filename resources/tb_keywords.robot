@@ -22,3 +22,8 @@ Send Line Of 999 Characters
     ${cmd}=    Set Variable    echo -e "EHLO ${HOST}\r\n MAIL FROM:<${SENDER}>\r\nRCPT TO:<${USER}>\r\nDATA\r\n${line_999}\r\n.\r\nQUIT\r\n" | nc ${HOST} ${PORT_INT}
     ${mail_result}=    Execute Command    ${cmd}
     [Return]    ${mail_result}
+
+Send EHLO
+    ${cmd}=    Set Variable    echo -e "EHLO ${HOST}\r\n" | nc ${HOST} ${PORT_INT}
+    ${ehlo_result}=    Execute Command    ${cmd}
+    [Return]    ${ehlo_result}
