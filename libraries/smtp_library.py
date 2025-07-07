@@ -60,8 +60,7 @@ def verify_recipient_domain(host, port, sender, recipient):
         smtp_svr = smtplib.SMTP(host, port)
         smtp_svr.mail(sender)
         code, response = smtp_svr.rcpt(recipient)
-        logger.info("Reply"
-                    " code rcpt TO: %d, %s" % ( code, response))
+        logger.info("Reply code rcpt TO: %d, %s" % ( code, response))
         if code == 250:
             try:
                 smtp_svr.data('Test msg')
