@@ -5,6 +5,7 @@ Resource    resources/get_env.robot
 *** Variables ***
 ${INVALID_RCPT_NAME}=    user@nonexistingdom123.com
 
+# Add smtpd_recipient_restrictions = reject_unauth_destinationto in /etc/postfix/main.cf
 *** Test Cases ***
 Handle Non Existing Rcpt Domain
     Load Environment Variables

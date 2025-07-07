@@ -83,7 +83,7 @@ def validate_hostname(hostname, smtp_srv=smtplib.SMTP()):
     return smtp_srv.docmd('ehlo', hostname)
 
 def form_letter_with_utf8(text, from_addr, to_addr, subject='Test message1'):
-    msg = MIMEText(text, 'plain', 'utf-8')# 'plain', 'utf-8')
+    msg = MIMEText(text, 'plain', 'utf-8')
     msg['From'] = from_addr
     msg['To'] = to_addr
     msg['Subject'] = subject
