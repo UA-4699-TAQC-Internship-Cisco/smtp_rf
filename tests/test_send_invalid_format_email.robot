@@ -1,6 +1,6 @@
 *** Settings ***
-Resource    ../resources/get_env.robot
-Resource    ../resources/resource.robot
+Resource    resources/get_env.robot
+Resource    resources/resource.robot
 
 Test Setup      Open Connection To SMTP
 Test Teardown   Close Connection
@@ -15,7 +15,7 @@ ${BODY}       Have you received it?)
 
 
 *** Test Cases ***
-Test Send Basic Mail TC011
+Test Send Basic Mail Invalid Format TC016
     Load Environment Variables
 
     ${output}=    Send Mail
