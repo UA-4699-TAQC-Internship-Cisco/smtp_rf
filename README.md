@@ -61,7 +61,7 @@ robot --pythonpath . --outputdir results . tests
 Install Postfix on CentOS
 ```shell
 sudo yum update -y
-sudo yum install postfix -y
+sudo yum install postfix dovecot -y
 ```
 Run: 
 
@@ -108,3 +108,33 @@ restart
 sudo systemctl restart postfix
 ```
 
+### Configure Dovecot for IMAP and POP3 access
+Open the Dovecot configuration file:
+```shell
+sudo nano /etc/dovecot/dovecot.conf
+```
+Add or modify the following line to enable both IMAP and POP3 protocols:
+```
+protocols = imap pop3
+```
+Set up Maildir as the mailbox format
+```shell
+sudo nano /etc/dovecot/conf.d/10-mail.conf
+```
+Add or modify the following line to set the mail location:
+```
+mail_location = maildir:~/Maildir
+```
+
+Start and enable the Dovecot service
+```shell
+sudo systemctl enable dovecot
+sudo systemctl start dovecot
+```
+
+Open IMAP and POP3 ports in the firewall
+```shell
+sudo firewall-cmd --add-service=imap --permanent
+sudo firewall-cmd --add-service=pop3 --permanent
+sudo firewall-cmd --reload
+```
