@@ -15,7 +15,7 @@ Successful Connection to Submission Port (587) with STARTTLS
     ${connection_result}=    Test TCP connectivity
     Should Contain    ${connection_result}    Connected to ${HOST}:${SMTP_PORT}
 #EHLO
-    ${ehlo_result}=   Send EHLO
+    ${ehlo_result}=   Send EHLO     ${SMTP_PORT}
     Should Contain      ${ehlo_result}    250
 
 #Send the STARTTLS

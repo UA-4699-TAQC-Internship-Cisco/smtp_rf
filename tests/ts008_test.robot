@@ -13,7 +13,7 @@ ${AUTH_STRING}       AGludmFsaWRfdXNlcgB3cm9uZ19wYXNz
  Failed Authentication (Invalid Credentials)
     Connect To SMTP And Authenticate
 #Send the EHLO example.com command
-    ${ehlo_result}=   Send EHLO
+    ${ehlo_result}=   Send EHLO     25
     Should Contain      ${ehlo_result}    250
 #Attempt AUTH PLAIN or AUTH LOGIN, provide incorrect (invalid) credentials
     ${auth_result}=    Provide Incorrect AUTH LOGIN
