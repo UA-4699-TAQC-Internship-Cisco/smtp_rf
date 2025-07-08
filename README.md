@@ -155,3 +155,7 @@ Configuration to TC0029(blocklist sender):
 2. Add blocklist address/addresses:  eg. spam@example.net REJECT
 3. Create hash file:  sudo postmap /etc/postfix/sender_access
 4.  Restart postfix: sudo systemctl restart postfix
+
+Config for TC013:
+smtputf8_autodetect_classes = all
+smtputf8_enable = ${{compatibility_level} < {1} ? {no} : {yes}}
