@@ -32,7 +32,7 @@ Send Line Of 999 Characters
 
 Send EHLO
     [Arguments]     ${PORT}
-    ${cmd}=    Set Variable    echo -e "EHLO ${HOST}\r\n" | nc ${HOST} ${PORT_INT}
+    ${cmd}=    Set Variable    echo -e "EHLO ${HOST}\r\n" | nc ${HOST} ${PORT}
     ${ehlo_result}=    Execute Command    ${cmd}
     [Return]    ${ehlo_result}
 
