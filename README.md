@@ -57,8 +57,8 @@ robot --pythonpath . --outputdir results . tests
 
 ## CentOS setup
 
-### Installing Postfix
-Install Postfix on CentOS
+### Installing Postfix and Dovecot
+Install Postfix and Devcot on CentOS
 ```shell
 sudo yum update -y
 sudo yum install postfix dovecot -y
@@ -87,9 +87,18 @@ sudo nano /etc/postfix/main.cf
 add the following parameters:
 ```text
 inet_interfaces = all
-inet_protocols = ipv4
+inet_protocols = all
 mydestination = $myhostname, localhost.$mydomain, localhost
 mynetworks = 127.0.0.0/8, [IP_host]
+smtpd_sender_restrictions = check_sender_access hash:/etc/postfix/sender_access, permit
+smtpd_recipient_restrictions = reject_unauth_destination
+```
+Create the sender_access file:
+```text
+If smtp_sender does not exist add: 
+```
+```shell
+sudo postconf -e "smtpd_sender_restrictions = check_sender_access hash:/etc/postfix/sender_access, permit"
 ```
 restart 
 ```shell
@@ -114,7 +123,7 @@ Open the Dovecot configuration file:
 sudo nano /etc/dovecot/dovecot.conf
 ```
 Add or modify the following line to enable both IMAP and POP3 protocols:
-```
+```text
 protocols = imap pop3
 ```
 Set up Maildir as the mailbox format
@@ -122,7 +131,7 @@ Set up Maildir as the mailbox format
 sudo nano /etc/dovecot/conf.d/10-mail.conf
 ```
 Add or modify the following line to set the mail location:
-```
+```text
 mail_location = maildir:~/Maildir
 ```
 
@@ -138,3 +147,11 @@ sudo firewall-cmd --add-service=imap --permanent
 sudo firewall-cmd --add-service=pop3 --permanent
 sudo firewall-cmd --reload
 ```
+
+
+### Configuration for some tests
+Configuration to TC0029(blocklist sender):
+1. Create/edit file: sudo nano /etc/postfix/sender_access
+2. Add blocklist address/addresses:  eg. spam@example.net REJECT
+3. Create hash file:  sudo postmap /etc/postfix/sender_access
+4.  Restart postfix: sudo systemctl restart postfix
