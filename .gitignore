@@ -196,6 +196,7 @@ cython_debug/
 ### Mac OS ###
 .DS_Store
 
+results/
 .
 log.html
 output.xml
