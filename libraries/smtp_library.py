@@ -1,6 +1,12 @@
 import smtplib
 import paramiko
 from email.MIMEText import MIMEText
+import socket
+import base64
+from robot.api.deco import keyword
+import ssl
+
+sock = None
 
 from config.logger_config import setup_logger
 
@@ -60,7 +66,7 @@ def verify_recipient_domain(host, port, sender, recipient):
         smtp_svr = smtplib.SMTP(host, port)
         smtp_svr.mail(sender)
         code, response = smtp_svr.rcpt(recipient)
-        logger.info("Reply code rcpt TO: %d, %s" % ( code, response))
+        logger.info("Reply code rcpt TO: %d, %s" % (code, response))
         if code == 250:
             try:
                 smtp_svr.data('Test msg')
@@ -82,6 +88,7 @@ def verify_recipient_domain(host, port, sender, recipient):
 def validate_hostname(hostname, smtp_srv=smtplib.SMTP()):
     return smtp_srv.docmd('ehlo', hostname)
 
+
 def form_letter_with_utf8(text, from_addr, to_addr, subject='Test message1'):
     msg = MIMEText(text, 'plain', 'utf-8')
     msg['From'] = from_addr
@@ -89,6 +96,7 @@ def form_letter_with_utf8(text, from_addr, to_addr, subject='Test message1'):
     msg['Subject'] = subject
 
     return msg.get_payload(decode=True)
+
 
 def login_server(username, passw, smtp_srv=smtplib.SMTP()):
     return smtp_srv.login(username, passw)
@@ -107,6 +115,7 @@ def connect_server(host, port=25):
 
 def make_quit(smtp_svr=smtplib.SMTP()):
     return smtp_svr.quit()
+
 
 def send_message_smtp(from_addr, to_addr, message, smtp_srv=smtplib.SMTP()):
     logger = setup_logger("SendSmtpMessage")
@@ -144,3 +153,52 @@ def read_log_file(host, username, password):
         'echo {} | sudo -S tail -n 6 /var/log/maillog'.format(password)
     )
     return stdout.read()
+
+@keyword
+def open_smtp_connection(host, port):
+    global sock
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.settimeout(5)
+    sock.connect((host, int(port)))
+
+
+@keyword
+def read_smtp_banner(expected_code):
+    global sock
+    if not sock:
+        raise AssertionError("SMTP socket is not open.")
+    data = ''
+    while True:
+        chunk = sock.recv(1024)
+        if not chunk:
+            break
+        data += chunk.decode('utf-8') if isinstance(chunk, bytes) else chunk
+        if str(expected_code) in data:
+            break
+    return data.strip()
+
+
+@keyword
+def send_smtp_command(command):
+    global sock
+    if not sock:
+        raise AssertionError("SMTP socket is not open.")
+    sock.sendall((command + '\r\n').encode())
+
+
+@keyword
+def encode_string_to_base64(string_value):
+    if not isinstance(string_value, bytes):
+        string_value = string_value.encode('utf-8')
+    encoded = base64.b64encode(string_value)
+    if isinstance(encoded, bytes):
+        encoded = encoded.decode('utf-8')
+    return encoded
+
+
+@keyword
+def close_smtp_connection():
+    global sock
+    if sock:
+        sock.close()
+        sock = None
