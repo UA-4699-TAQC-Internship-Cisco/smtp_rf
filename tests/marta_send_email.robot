@@ -1,5 +1,5 @@
 *** Settings ***
-Resource    ../resources/marta_get_env.robot
+Resource    ../resources/get_env.robot
 Suite Setup    Load Environment Variables
 Library    Process
 
@@ -12,8 +12,8 @@ Test SMTP Email Sending
     ${env}=    Create Dictionary
     Log    Host: ${HOST}
     Log    Port: ${PORT_INT}
-    Log    From: ${FROM_ADDR}
-    Log    To: ${TO_ADDR}
+    Log    From: ${SENDER}
+    Log    To: ${RECIPIENT}
     ${result}=    Run Process    python    ${SMTP_SCRIPT_PATH}
     ...    env=${env}
     ...    timeout=30s

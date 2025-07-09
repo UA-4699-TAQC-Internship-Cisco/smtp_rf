@@ -1,19 +1,19 @@
 *** Settings ***
-Library    ../libraries/marta_smtp_socket.py
-Resource    ../resources/marta_get_env.robot
+Library    ../libraries/smtp_library.py
+Resource    ../resources/get_env.robot
 
 *** Test Cases ***
 TC007: Successful Authentication (AUTH LOGIN)
 
-    Load Environment Variables    .env
+    Load Environment Variables
 
-    ${host}=    Get Environment Variable    HOST
-    ${port}=    Get Environment Variable    SMTP_PORT
+    ${HOST}=    Get Environment Variable    HOSTNAME
+    ${PORT}=    Get Environment Variable    SMTP_PORT
     ${ehlo_domain}=    Get Environment Variable    EHLO_DOMAIN
     ${username}=    Get Environment Variable    EMAIL_ACCOUNT
     ${email_password}=    Get Environment Variable    EMAIL_PASSWORD
 
-    Open Smtp Connection    ${host}    ${port}
+    Open Smtp Connection    ${HOST}    ${PORT}
     ${banner}=    Read Smtp Banner  220
     Log    Server banner: ${banner}
     Should Contain    ${banner}  220

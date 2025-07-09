@@ -1,31 +1,21 @@
-"""TC009: Failed Authentication (Missing Credentials)
-o Description: Verify that authentication fails with missing credentials.
-o Steps:
-1. Establish a connection to the SMTP server.
-2. Send the EHLO example.com command.
-3. Attempt AUTH PLAIN or AUTH LOGIN.
-4. Provide empty or incomplete (e.g., only username, no password) credentials.
-5. Observe the server's response code.
-o Expected Result: Server responds with 501 Syntax error or 535 Authentication credentials invalid."""
-
 *** Settings ***
-Library    ../libraries/marta_smtp_socket.py
-Resource    ../resources/marta_get_env.robot
+Library    ../libraries/smtp_library.py
+Resource    ../resources/get_env.robot
 
 
 *** Test Cases ***
 TC009: Failed Authentication (Missing Credentials)
 
-    Load Environment Variables    .env
+    Load Environment Variables
 
-    ${host}=    Get Environment Variable    HOST
-    ${port}=    Get Environment Variable    SMTP_PORT
+    ${HOST}=    Get Environment Variable    HOSTNAME
+    ${PORT}=    Get Environment Variable    SMTP_PORT
     ${ehlo_domain}=    Get Environment Variable    EHLO_DOMAIN
     ${wrong_username}=    Get Environment Variable    WRONG_ACCOUNT
     ${email_password}=    Get Environment Variable    EMAIL_PASSWORD
 
 
-    Open Smtp Connection    ${host}    ${port}
+    Open Smtp Connection    ${HOST}    ${PORT}
     ${banner}=    Read Smtp Banner  220
     Log    Server banner: ${banner}
     Should Contain    ${banner}  220
