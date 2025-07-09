@@ -42,3 +42,8 @@ Check Recipient Domain
     [Arguments]    ${HOST}    ${SMTP_PORT}    ${FROM_ADDR}    ${TO_ADDR}
     @{RESPONSE}=    Verify Recipient Domain    ${HOST}    ${SMTP_PORT}    ${FROM_ADDR}    ${TO_ADDR}
     [Return]    @{RESPONSE}
+    
+Check Maillog
+    [Arguments]    ${HOST}    ${USER}    ${PASS}
+    ${OUTPUT}=    Read Log File    ${HOST}    ${USER}    ${PASS}
+    [Return]    ${OUTPUT}
