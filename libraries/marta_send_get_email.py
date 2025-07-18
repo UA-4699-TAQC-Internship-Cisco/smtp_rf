@@ -8,7 +8,6 @@ import sys
 
 print sys.path
 
-
 load_dotenv()
 
 # ======= send email =======
@@ -52,7 +51,6 @@ def send_email(smtp_server, smtp_port, local_sender, recipient, subject, body):
 imap_server = os.getenv("IMAP_SERVER")
 user_email = os.getenv("EMAIL_ACCOUNT")
 user_password = os.getenv("EMAIL_PASSWORD")
-
 
 
 def get_email(server, user, password):
