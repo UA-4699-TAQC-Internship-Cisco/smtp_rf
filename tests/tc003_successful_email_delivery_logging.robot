@@ -14,7 +14,7 @@ ${body}=        Successful Email Delivery Logging Test
 
 *** Test Cases ***
 Successful Email Delivery Logging
-    Send Mail    brehovat    tetiana    SUBJECT: Test   Successful Email Delivery Logging Test
+    Send Mail    ${from}    ${to}    ${subject}   ${body}
     ${maillog}=        Read Logfile
     Should Contain      ${maillog}      FROM:<${SENDER}>
     Should Contain      ${maillog}      TO:<${RECIPIENT}>
