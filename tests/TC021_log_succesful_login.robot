@@ -16,7 +16,7 @@ TC021: Log Successful Login
     Connect To SMTP
     Authenticate SMTP User
     Sleep    3s
-    ${log}=    Connect To SSH And Read Logs
+    ${log}=    Read Log File    ${HOST}    ${USER}    ${PASS}
     Should Contain    ${log}    235 Authentication successful
 
 
