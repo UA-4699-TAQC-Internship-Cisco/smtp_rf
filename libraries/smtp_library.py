@@ -140,6 +140,19 @@ def read_recent_mail(username, password, host):
             username, username))
     return stdout.read()
 
+def read_log_file(host, username, password):
+    """Read postfix log file that locates in /var/log/maillog.
+
+    To connect CentOS virtual machine: hostname, username and password are used.
+    tail command is used to read log file. (You can edit an argument to -n flag, so you can obtain a different log length)
+    """
+    session = paramiko.SSHClient()
+    session.load_system_host_keys()
+    session.connect(host, 22, username, password)
+    _, stdout, _ = session.exec_command(
+        'echo {} | sudo -S tail -n 6 /var/log/maillog'.format(password)
+    )
+    return stdout.read()
 
 @keyword
 def open_smtp_connection(host, port):
