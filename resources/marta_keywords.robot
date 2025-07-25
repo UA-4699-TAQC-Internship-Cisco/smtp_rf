@@ -14,6 +14,14 @@ Close SMTP Connection
     Run Keyword And Ignore Error    Write    QUIT
     Close Connection
 
+
+Open TLS connection
+    [Arguments]    ${host}    ${tls_port}
+    Open Connection    ${host}    ${tls_port}
+    ${response}=    Read Until    \n
+    Log    TLS Greeting: ${response}
+
+
 SMTP Command Should Succeed
     [Arguments]    ${command}
     Write    ${command}
@@ -41,5 +49,5 @@ Perform AUTH LOGIN
 
 Setup Environment And Open Connection
     [Arguments]    ${host}    ${port_int}
-    Get Environment Variables
+    Load Environment Variables
     Open Connection    ${host}    ${port_int}

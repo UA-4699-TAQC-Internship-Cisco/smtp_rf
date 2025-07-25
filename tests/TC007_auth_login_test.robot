@@ -6,12 +6,11 @@ Resource    ../resources/get_env.robot
 TC007: Successful Authentication (AUTH LOGIN)
 
     Load Environment Variables
-
     ${HOST}=    Get Environment Variable    HOSTNAME
     ${PORT}=    Get Environment Variable    SMTP_PORT
-    ${ehlo_domain}=    Get Environment Variable    EHLO_DOMAIN
-    ${username}=    Get Environment Variable    EMAIL_ACCOUNT
-    ${email_password}=    Get Environment Variable    EMAIL_PASSWORD
+    ${EHLO_DOMAIN}=    Get Environment Variable    EHLO_DOMAIN
+    ${TEST_USER}=    Get Environment Variable    TEST_USER
+    ${TEST_PASS}=    Get Environment Variable    TEST_PASS
 
     Open Smtp Connection    ${HOST}    ${PORT}
     ${banner}=    Read Smtp Banner  220
@@ -19,7 +18,7 @@ TC007: Successful Authentication (AUTH LOGIN)
     Should Contain    ${banner}  220
 
 Send the EHLO example.com
-    Send Smtp Command        EHLO ${ehlo_domain}
+    Send Smtp Command        EHLO ${EHLO_DOMAIN}
     ${ehlo_resp}=           Read Smtp Banner            250
     Log                    EHLO response: ${ehlo_resp}
     Should Contain          ${ehlo_resp}    250
@@ -31,14 +30,14 @@ Send the AUTH LOGIN command
     Should Contain          ${auth_resp}    334
 
 Send the base64 encoded username
-    ${username_b64}=        Encode String To Base64    ${username}
+    ${username_b64}=        Encode String To Base64    ${TEST_USER}
     Send Smtp Command        ${username_b64}
     ${user_resp}=           Read Smtp Banner        334
     Log                    Username response: ${user_resp}
     Should Contain          ${user_resp}    334
 
 Send the base64 encoded password
-    ${password_b64}=        Encode String To Base64    ${email_password}
+    ${password_b64}=        Encode String To Base64    ${TEST_PASS}
     Send Smtp Command        ${password_b64}
     ${pass_resp}=           Read Smtp Banner        235
     Log                    Password response: ${pass_resp}
