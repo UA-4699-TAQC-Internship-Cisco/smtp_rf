@@ -41,3 +41,7 @@ Provide Incorrect AUTH LOGIN
     ${inv_data_cmd}=    Set Variable    echo -e "AUTH LOGIN ${AUTH_STRING}\r\n" | nc ${HOST} ${PORT_INT}
     ${auth_result}=    Execute Command    ${inv_data_cmd}
     [Return]    ${auth_result}
+
+Read Logfile
+     ${maillog}=        Execute Command     echo '${PASS}' | su -c 'cat /var/log/maillog'
+     [Return]    ${maillog}
