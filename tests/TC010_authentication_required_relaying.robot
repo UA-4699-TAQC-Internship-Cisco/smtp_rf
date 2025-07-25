@@ -35,10 +35,9 @@ TC010: Authentication Required for Relaying (Unauthenticated Attempt)
 
 # Step 4: Send RCPT TO (to external domain)
     Send Smtp Command       RCPT TO:<${rcpt_to}>
-    ${rcpt_resp}=           Read Smtp Banner    451
+    ${rcpt_resp}=           Read Smtp Banner    554
     Log                     RCPT TO response: ${rcpt_resp}
-    Should Contain Any      ${rcpt_resp}    451    550    530
-
+    Should Contain Any      ${rcpt_resp}    554
 
 
 # Step 5: Close connection

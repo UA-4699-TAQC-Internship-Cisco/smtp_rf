@@ -149,19 +149,54 @@ def open_smtp_connection(host, port):
     sock.connect((host, int(port)))
 
 
+# @keyword
+# def read_smtp_banner(expected_code):
+#     global sock
+#     if not sock:
+#         raise AssertionError("SMTP socket is not open.")
+#     data = ''
+#     while True:
+#         chunk = sock.recv(1024)
+#         if not chunk:
+#             break
+#         data += chunk.decode('utf-8') if isinstance(chunk, bytes) else chunk
+#         if str(expected_code) in data:
+#             break
+#     return data.strip()
 @keyword
 def read_smtp_banner(expected_code):
+    import socket
+    import time
+    from config.logger_config import setup_logger
+
     global sock
+    logger = setup_logger("ReadSmtpBanner")
+
     if not sock:
         raise AssertionError("SMTP socket is not open.")
+
     data = ''
+    timeout = 15
+    start = time.time()
+
+    sock.settimeout(timeout)
+
     while True:
-        chunk = sock.recv(1024)
-        if not chunk:
-            break
-        data += chunk.decode('utf-8') if isinstance(chunk, bytes) else chunk
-        if str(expected_code) in data:
-            break
+        try:
+            chunk = sock.recv(1024)
+            if not chunk:
+                break
+            data += chunk.decode('utf-8') if isinstance(chunk, bytes) else chunk
+            if str(expected_code) in data:
+                break
+        except socket.timeout:
+            logger.error("Timeout: no response with code %s" % expected_code)
+            raise Exception("Timeout waiting for SMTP response %s" % expected_code)
+        if time.time() - start > timeout:
+            logger.error("Timeout limit reached (%d seconds)" % timeout)
+            raise Exception("No response with code %s in %d seconds" % (expected_code, timeout))
+
+    logger.info("Received response: %s" % data.strip())
     return data.strip()
 
 
@@ -189,3 +224,13 @@ def close_smtp_connection():
     if sock:
         sock.close()
         sock = None
+
+@keyword
+def send_email_body(from_addr, to_addr, subject, body):
+    send_smtp_command("From: %s" % from_addr)
+    send_smtp_command("To: %s" % to_addr)
+    send_smtp_command("Subject: %s" % subject)
+    send_smtp_command("")
+    for line in body.splitlines():
+        send_smtp_command(line)
+    send_smtp_command(".")
