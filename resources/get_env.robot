@@ -10,6 +10,10 @@ Load Environment Variables
     ${PORT_INT}=    Evaluate    int(${PORT})
     ${TLS_PORT}=    Get Environment Variable    TLS_PORT
     ${TLS_PORT_INT}=    Evaluate    int(${TLS_PORT})
+    ${AUTH_PORT}=    Get Environment Variable    AUTH_PORT
+    ${AUTH_PORT_INT}=    Evaluate    int(${AUTH_PORT})
+    ${SSH_PORT}=    Get Environment Variable    SSH_PORT
+    ${SSH_PORT_INT}=    Evaluate    int(${SSH_PORT})
 
     ${USER}=    Get Environment Variable    SSH_USERNAME
     ${PASS}=    Get Environment Variable    SSH_PASSWORD
@@ -31,6 +35,10 @@ Load Environment Variables
     Set Suite Variable    ${PORT_INT}
     Set Suite Variable    ${TLS_PORT}
     Set Suite Variable    ${TLS_PORT_INT}
+    Set Suite Variable    ${AUTH_PORT}
+    Set Suite Variable    ${AUTH_PORT_INT}
+    Set Suite Variable    ${SSH_PORT}
+    Set Suite Variable    ${SSH_PORT_INT}
     Set Suite Variable    ${TCP_TIMEOUT}
     Set Suite Variable    ${USER}
     Set Suite Variable    ${PASS}
