@@ -37,3 +37,4 @@ Connect To SSH And Read Logs
     Login                   ${USER}    ${PASS}
     ${log}=                 Execute Command    sudo tail -n 10 /var/log/maillog
     [Return]                ${log}
+
