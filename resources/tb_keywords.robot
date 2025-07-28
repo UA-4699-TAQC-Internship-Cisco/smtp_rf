@@ -45,3 +45,9 @@ Provide Incorrect AUTH LOGIN
 Read Logfile
      ${maillog}=        Execute Command     echo '${PASS}' | su -c 'cat /var/log/maillog'
      [Return]    ${maillog}
+
+VRFY Command
+    [Arguments]     ${USER}
+    ${inv_data_cmd}=    Set Variable    echo -e "VRFY ${USER}\r\n" | nc ${HOST} ${PORT_INT}
+    ${auth_result}=    Execute Command    ${inv_data_cmd}
+    [Return]    ${auth_result}
