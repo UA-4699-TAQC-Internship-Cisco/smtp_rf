@@ -16,3 +16,6 @@ Successful Email Delivery Logging
     ${maillog}=        Read Logfile
     Should Contain      ${maillog}      FROM:<${SENDER}>
     Should Contain      ${maillog}      TO:<${RECIPIENT}>
+
+    Close Smtp Connection
+

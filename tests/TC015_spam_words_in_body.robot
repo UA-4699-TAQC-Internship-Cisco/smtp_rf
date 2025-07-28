@@ -14,3 +14,4 @@ ${body}=        Congratulations, you won the lottery!
 Successful Email Delivery Logging
     Send Mail    ${SENDER}    ${RECIPIENT}    ${subject}   ${body}
     ${maillog}=        Read Logfile
+    Close Smtp Connection

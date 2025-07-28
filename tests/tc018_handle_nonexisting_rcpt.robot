@@ -19,3 +19,4 @@ Handle Non Existing Rcpt Domain
 Verify Log Message
     ${LOG_CONTENT}=    Check Maillog    ${HOST}    ${USER}    ${PASS}
     Should Contain    ${LOG_CONTENT}    ${REPLY}[1]
+    Close Smtp Connection
