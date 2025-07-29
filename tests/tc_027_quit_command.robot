@@ -10,3 +10,4 @@ Quit From Server
     ${SMTP_SVR}=   Connect Smtp Server    ${HOST}    ${PORT_INT}
     @{RESULT}=    Send Quit Command    ${SMTP_SVR}
     Should Be Equal    ${RESULT}[1]    2.0.0 Bye
+    Close Smtp Connection

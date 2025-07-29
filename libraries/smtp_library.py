@@ -1,14 +1,15 @@
-import smtplib
-import paramiko
-from email.MIMEText import MIMEText
-import socket
 import base64
+import paramiko
+import smtplib
+import socket
+from email.MIMEText import MIMEText
 from robot.api.deco import keyword
-import ssl
+
+from config.logger_config import setup_logger
 
 sock = None
 
-from config.logger_config import setup_logger
+
 
 
 def send_email_headers_only(sender, recipient, subject, server_ip, server_port):
@@ -126,6 +127,9 @@ def send_message_smtp(from_addr, to_addr, message, smtp_srv=smtplib.SMTP()):
         return reply
     except smtplib.SMTPRecipientsRefused:
         logger.warn("Recipient address is invalid: %s" % to_addr)
+    except smtplib.SMTPDataError:
+        logger.warn("The email was rejected")
+        return 550, "5.7.1 message content rejected"
     finally:
         logger.info("Quit command is executing...")
         smtp_srv.quit()
@@ -133,7 +137,7 @@ def send_message_smtp(from_addr, to_addr, message, smtp_srv=smtplib.SMTP()):
 
 def read_recent_mail(username, password, host):
     session = paramiko.SSHClient()
-    session.load_system_host_keys()
+    session.load_host_keys()
     session.connect(host, 22, username, password)
     _, stdout, _ = session.exec_command(
         "recent_mail=$(ls --sort=time /home/{}/Maildir/new/ | head -n 1) && cat /home/{}/Maildir/new/$recent_mail".format(
@@ -154,6 +158,12 @@ def read_log_file(host, username, password):
     )
     return stdout.read()
 
+
+def read_and_check_log_for_auth(host, username, password):
+    log = read_log_file(host, username, password)
+    if "sasl_method=" not in log:
+        raise AssertionError("AUTH log not found in maillog:\n" + log)
+
 @keyword
 def open_smtp_connection(host, port):
     global sock
@@ -162,20 +172,6 @@ def open_smtp_connection(host, port):
     sock.connect((host, int(port)))
 
 
-# @keyword
-# def read_smtp_banner(expected_code):
-#     global sock
-#     if not sock:
-#         raise AssertionError("SMTP socket is not open.")
-#     data = ''
-#     while True:
-#         chunk = sock.recv(1024)
-#         if not chunk:
-#             break
-#         data += chunk.decode('utf-8') if isinstance(chunk, bytes) else chunk
-#         if str(expected_code) in data:
-#             break
-#     return data.strip()
 @keyword
 def read_smtp_banner(expected_code):
     import socket
@@ -237,6 +233,67 @@ def close_smtp_connection():
     if sock:
         sock.close()
         sock = None
+
+def add_address_to_safe(host, port, user, password, address):
+    """Append an address or range of addresses to /etc/postfix/sender_access as safe list.
+
+    To execute this method successful, a specified user is required to have sudo privileges;
+    Make sure the bash script has an executable permission"""
+    session = paramiko.SSHClient()
+    session.load_system_host_keys()
+    session.connect(host, port, user, password)
+    append_address = "echo {} | sudo -S /home/{}/accept_address.sh {}".format(password, user, address)
+    session.exec_command(append_address)
+
+def remove_address_from_safe(host, port, username, password, to_remove_address):
+    """Remove an email address or range of addresses from /etc/postfix/sender_access
+
+    To execute this method successful, a specified user is required to have sudo privileges;
+    Make sure the bash script has an executable permission"""
+    client = paramiko.SSHClient()
+    client.load_system_host_keys()
+    client.connect(host, port, username, password)
+    remove_address = "echo {} | sudo -S /home/{}/remove_address.sh {}".format(password, username, to_remove_address)
+    client.exec_command(remove_address)
+
+def update_filter_and_reload_smtp(host, port, user, password):
+    """Confirms changes in /etc/postfix/sender_access and reload service.
+
+    To execute this method successful, a specified user is required to have sudo privileges.
+    Add user to sudo (run as root)#: usermod -a -G wheel {user}"""
+    client = paramiko.SSHClient()
+    client.load_system_host_keys()
+    client.connect(host, port, user, password)
+    update_file_refresh_smtp = "echo {} | sudo -S /home/{}/update_list_and_reload.sh".format(password, user)
+    _, stdout, _ = client.exec_command(update_file_refresh_smtp)
+    return stdout.read()
+
+def form_simple_letter(text, from_addr, to_addr, subject = "Test message1"):
+    """Create an email with simple template that includes basic headers:
+     Form (sender), To (recipient) and subject of email"""
+    mail = MIMEText(text, "plain", "ascii")
+    mail["From"] = from_addr
+    mail["To"] = ",".join(to_addr)
+    mail["Subject"] = subject
+    return mail.as_string()
+
+def connect_and_login(host, port, username, password, use_tls=True):
+    try:
+        if use_tls:
+            server = smtplib.SMTP(host, port)
+            server.ehlo()
+            server.starttls()
+            server.ehlo()
+        else:
+            server = smtplib.SMTP_SSL(host, port)
+
+        server.login(username, password)
+        server.quit()
+        return "Login successful"
+    except smtplib.SMTPAuthenticationError as e:
+        raise Exception("Authentication failed: {e}")
+    except Exception as e:
+        raise Exception("Connection/Login failed: {e}")
 
 @keyword
 def send_email_body(from_addr, to_addr, subject, body):
