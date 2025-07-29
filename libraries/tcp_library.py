@@ -1,9 +1,9 @@
-import socket
-import base64
-from robot.api.deco import keyword
 import ssl
+import socket
+from robot.api.deco import keyword
+import base64
 
-sock = None
+# sock = None
 
 from config.logger_config import setup_logger
 
@@ -108,19 +108,35 @@ def check_tls_smtp_socket_220(host, port):
 
 @keyword
 def create_tls_socket(host, port):
-    """Creates and returns a TLS-wrapped socket connected to the specified host and port"""
-    # context = ssl.create_default_context()
-    context = ssl._create_unverified_context()
-    raw_sock = socket.create_connection((host, int(port)), timeout=10)
-    tls_sock = context.wrap_socket(raw_sock, server_hostname=host)
+    context = ssl.create_default_context()
+    context.check_hostname = False
+    context.verify_mode = ssl.CERT_NONE
+    sock = socket.create_connection((host, port))
+    tls_sock = context.wrap_socket(sock, server_hostname=host)
     return tls_sock
 
 
 @keyword
-def read_tls_banner(sock):
-    """Reads the initial server banner from TLS socket"""
-    banner = sock.recv(1024).decode()
-    return banner
+def read_tls_banner(tls_socket):
+    """Read banner with timeout (Python 2.7.5 compatible)"""
+    try:
+        tls_socket.settimeout(10)
+        banner = tls_socket.recv(1024).strip()
+        return banner
+    except socket.timeout:
+        raise AssertionError("Timeout while waiting for server banner")
+    except Exception as e:
+        raise AssertionError("Failed to read banner: {}".format(str(e)))
+
+
+@keyword
+def close_tls_socket(tls_socket):
+    """Safely close TLS socket"""
+    try:
+        if tls_socket:
+            tls_socket.close()
+    except:
+        pass
 
 
 @keyword

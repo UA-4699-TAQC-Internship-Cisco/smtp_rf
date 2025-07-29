@@ -11,6 +11,7 @@ ${SMTP_PORT}       587
 
 *** Test Cases ***
 Successful Connection to Submission Port (587) with STARTTLS
+    Load Environment Variables
     Connect To SMTP And Authenticate
     ${connection_result}=    Test TCP connectivity
     Should Contain    ${connection_result}    Connected to ${HOST}:${SMTP_PORT}

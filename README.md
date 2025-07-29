@@ -43,6 +43,8 @@ SSH_PASSWORD='your_ssh_password'
 DOMAIN='' # domain part in addr user@{domain}
 SMTP_PORT='your_smtp_port'
 EMAIL_DIR='/var/spool/mail/your_email_username'
+TLS_PORT=465
+IMAP_PORT=993
 
 LOCAL_SENDER='python@localhost'
 REMOTE_RECIPIENT='your_email@localhost'
@@ -79,6 +81,16 @@ Status check:
 sudo systemctl status postfix
 ```
 
+
+## Create Test User
+
+```bash
+sudo useradd testuser
+sudo passwd testuser
+mkdir -p /home/testuser/Maildir/{cur,new,tmp}
+chown -R testuser:testuser /home/testuser/Maildir
+```
+
 ### Configure Postfix to receive data from outside
 Open the Postfix configuration file:
 ```shell
@@ -91,7 +103,13 @@ inet_protocols = all
 mydestination = $myhostname, localhost.$mydomain, localhost
 mynetworks = 127.0.0.0/8, [IP_host]
 smtpd_sender_restrictions = check_sender_access hash:/etc/postfix/sender_access, permit
-smtpd_recipient_restrictions = reject_unauth_destination
+smtpd_recipient_restrictions =
+    permit_mynetworks,
+    permit_sasl_authenticated,
+    reject_unauth_destination
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+smtpd_sasl_auth_enable = yes
 ```
 Create the sender_access file:
 ```text
@@ -130,6 +148,27 @@ Set up Maildir as the mailbox format
 ```shell
 sudo nano /etc/dovecot/conf.d/10-mail.conf
 ```
+
+
+Edit `/etc/dovecot/conf.d/10-master.conf`:
+
+```conf
+service auth {
+  unix_listener /var/spool/postfix/private/auth {
+    mode = 0660
+    user = postfix
+    group = postfix
+  }
+}
+```
+
+Also ensure these settings are enabled in Dovecot (e.g., in `/etc/dovecot/conf.d/10-auth.conf`):
+
+```conf
+disable_plaintext_auth = no
+auth_mechanisms = plain login
+```
+
 Add or modify the following line to set the mail location:
 ```text
 mail_location = maildir:~/Maildir
@@ -159,3 +198,90 @@ Configuration to TC0029(blocklist sender):
 Config for TC013:
 smtputf8_autodetect_classes = all
 smtputf8_enable = ${{compatibility_level} < {1} ? {no} : {yes}}
+
+
+
+
+
+# TC026: Accept Mail from Address on Safe List
+
+## Preconditions
+
+1. Install Postfix and Dovecot:
+   ```bash
+   sudo yum install postfix dovecot -y
+   ```
+
+2. Enable and start services:
+   ```bash
+   sudo systemctl enable postfix
+   sudo systemctl start postfix
+   sudo systemctl enable dovecot
+   sudo systemctl start dovecot
+   ```
+
+3. Open necessary ports:
+   ```bash
+   sudo firewall-cmd --permanent --add-port=25/tcp
+   sudo firewall-cmd --permanent --add-port=465/tcp
+   sudo firewall-cmd --permanent --add-port=587/tcp
+   sudo firewall-cmd --permanent --add-port=993/tcp
+   sudo firewall-cmd --reload
+   ```
+
+4. Check firewall status:
+   ```bash
+   sudo firewall-cmd --list-all
+   ```
+
+---
+
+## Postfix Configuration
+
+1. Open the main config file:
+   ```bash
+   sudo nano /etc/postfix/main.cf
+   ```
+
+2. Ensure the following lines exist:
+   ```ini
+   myhostname = mail.example.com
+   mydomain = example.com
+   myorigin = $mydomain
+
+   inet_interfaces = all
+   inet_protocols = all
+
+   mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
+
+   mynetworks = 127.0.0.0/8, 192.168.0.0/24
+
+   smtpd_recipient_restrictions =
+       permit_mynetworks,
+       permit_sasl_authenticated,
+       check_sender_access hash:/etc/postfix/sender_access,
+       reject_unauth_destination
+   ```
+
+3. Create sender access file:
+   ```bash
+   sudo nano /etc/postfix/sender_access
+   ```
+
+   Add:
+   ```
+   trusted@example.com    OK
+   ```
+
+4. Generate `.db` file:
+   ```bash
+   sudo postmap /etc/postfix/sender_access
+   ```
+
+5. Reload Postfix:
+   ```bash
+   sudo systemctl restart postfix
+   ```
+   
+
+
