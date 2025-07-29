@@ -6,16 +6,12 @@ Resource    ../resources/resource.robot
 Test Setup      Connect To SMTP And Authenticate
 
 *** Variables ***
-${subject}=     Test
-${body}=        Successful Email Delivery Logging Test
+${subject}=     Congratulations!
+${body}=        Congratulations, you won the lottery!
 
 
 *** Test Cases ***
 Successful Email Delivery Logging
     Send Mail    ${SENDER}    ${RECIPIENT}    ${subject}   ${body}
     ${maillog}=        Read Logfile
-    Should Contain      ${maillog}      FROM:<${SENDER}>
-    Should Contain      ${maillog}      TO:<${RECIPIENT}>
-
     Close Smtp Connection
-

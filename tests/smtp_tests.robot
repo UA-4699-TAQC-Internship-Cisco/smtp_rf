@@ -18,3 +18,4 @@ Sending DATA Without RCPT TO
     [Documentation]    Verify that DATA is rejected if no RCPT TO command was sent.
     ${result}=    Send Data Without Rcpt To    ${SENDER}    ${HOST}    ${PORT_INT}
     Should Be Equal As Strings    ${result}    REJECTED
+    Close Smtp Connection

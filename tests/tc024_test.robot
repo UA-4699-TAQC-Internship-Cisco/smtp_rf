@@ -9,3 +9,4 @@ Send the EHLO example.com command
     ${ehlo_result}=    Send EHLO    25
     Should Contain    ${ehlo_result}    250
     Should Contain    ${ehlo_result}    PIPELINING
+    Close Smtp Connection

@@ -15,3 +15,5 @@ Send Mail With Utf8
     Send Message Via Host    ${HOST}    ${SENDER}    ${RECIPIENT}    ${LETTER_UTF8}
     ${SENT_LETTER}=    Open Recent Mail    ${HOST}    ${USER}    ${PASS}
     Should Contain    ${SENT_LETTER}    ${encoded_message}
+    Close Smtp Connection
+
