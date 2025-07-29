@@ -49,5 +49,4 @@ Perform AUTH LOGIN
 
 Setup Environment And Open Connection
     [Arguments]    ${host}    ${port_int}
-    Load Environment Variables
     Open Connection    ${host}    ${port_int}

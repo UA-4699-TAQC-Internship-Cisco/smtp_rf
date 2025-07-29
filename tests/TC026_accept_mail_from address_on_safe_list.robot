@@ -3,7 +3,7 @@ Library           ../libraries/smtp_library.py
 Resource          ../resources/get_env.robot
 
 *** Test Cases ***
-TC011: Accept Email From Safe List
+TC026: Accept Email From Safe List
     Load Environment Variables
     ${HOSTNAME}            Get Environment Variable    HOSTNAME
     ${SMTP_PORT}           Get Environment Variable    SMTP_PORT

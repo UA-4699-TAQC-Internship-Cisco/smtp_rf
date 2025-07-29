@@ -282,6 +282,51 @@ smtputf8_enable = ${{compatibility_level} < {1} ? {no} : {yes}}
    ```bash
    sudo systemctl restart postfix
    ```
-   
+## TC022_tracking_rejected_email_due_to_spam_filters
+## TC069_adding_an_address_to_the_blacklist
+
+### Header_checks and body_checks in Postfix
+
+### 1. Create header check file
+```
+sudo bash -c "cat > /etc/postfix/header_checks <<'EOF'
+/^Subject:.*lottery/i          REJECT Spam detected: blocked subject
+/^Subject:.*free money/i       REJECT Spam detected: suspicious subject
+/^Subject:.*Suspicious offer/i REJECT Spam detected: test subject
+/^From:.*@bad-domain.com/i     REJECT Blocked sender domain
+EOF"
+```
+### 2. Create body check file
+```
+sudo bash -c "cat > /etc/postfix/body_checks <<'EOF'
+/lottery/         REJECT Spam detected in body
+/free money/      REJECT Spam phrase found
+/test_spam_test/  REJECT Spam test phrase matched
+EOF"
+```
+### 3. Register files in Postfix
+```
+sudo nano /etc/postfix/main.cf
+```
+and add this lines
+```
+header_checks = regexp:/etc/postfix/header_checks
+body_checks = regexp:/etc/postfix/body_checks
+```
+### 4. Accept the changes
+```
+sudo postmap /etc/postfix/header_checks
+sudo postmap /etc/postfix/body_checks
+```
+and restart Postfix
+```
+sudo systemctl restart postfix
+```
+
+### 5. Check the logs after spam letter sent
+```
+sudo tail -f /var/log/maillog
+```
+
 
 
