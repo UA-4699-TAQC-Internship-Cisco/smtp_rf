@@ -50,3 +50,22 @@ Check Maillog
 
 Check Logfile
     [Arguments]    ${HOST}    ${USER}    ${PASS}
+
+
+Append Address To Safe
+    [Arguments]    ${HOST}    ${SSH_PORT}    ${USER}    ${PASS}    ${ADDR_TO_ADD}
+    Add Address To Safe    ${HOST}    ${SSH_PORT}    ${USER}    ${PASS}    ${ADDR_TO_ADD}
+
+Remove Whitelist Sender
+    [Arguments]    ${HOST}    ${SSH_PORT}    ${USER}    ${PASS}    ${ADDR_TO_REMOVE}
+    Remove Address From Safe    ${HOST}    ${SSH_PORT}    ${USER}    ${PASS}    ${ADDR_TO_REMOVE}
+
+Confirm Changes And Reload Smtp
+    [Arguments]    ${HOST}    ${SSH_PORT}    ${USER}    ${PASS}
+    ${OUTPUT}=    Update Filter And Reload Smtp    ${HOST}    ${SSH_PORT}    ${USER}    ${PASS}
+    [Return]    ${OUTPUT}
+
+Form Template Letter
+    [Arguments]    ${msg}    ${FROM_ADDR}    ${TO_ADDR}    ${SUBJECT}
+    ${FORMED_MAIL}=    Form Simple Letter    ${msg}    ${FROM_ADDR}     ${TO_ADDR}    ${SUBJECT}
+    [Return]    ${FORMED_MAIL}
