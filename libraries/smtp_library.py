@@ -6,9 +6,11 @@ import base64
 from robot.api.deco import keyword
 import ssl
 
+from config.logger_config import setup_logger
+
 sock = None
 
-from config.logger_config import setup_logger
+
 
 
 def send_email_headers_only(sender, recipient, subject, server_ip, server_port):
@@ -154,6 +156,12 @@ def read_log_file(host, username, password):
     )
     return stdout.read()
 
+
+def read_and_check_log_for_auth(host, username, password):
+    log = read_log_file(host, username, password)
+    if "sasl_method=" not in log:
+        raise AssertionError("AUTH log not found in maillog:\n" + log)
+
 @keyword
 def open_smtp_connection(host, port):
     global sock
@@ -202,3 +210,22 @@ def close_smtp_connection():
     if sock:
         sock.close()
         sock = None
+
+
+def connect_and_login(host, port, username, password, use_tls=True):
+    try:
+        if use_tls:
+            server = smtplib.SMTP(host, port)
+            server.ehlo()
+            server.starttls()
+            server.ehlo()
+        else:
+            server = smtplib.SMTP_SSL(host, port)
+
+        server.login(username, password)
+        server.quit()
+        return "Login successful"
+    except smtplib.SMTPAuthenticationError as e:
+        raise Exception("Authentication failed: {e}")
+    except Exception as e:
+        raise Exception("Connection/Login failed: {e}")

@@ -1,6 +1,6 @@
 *** Settings ***
 Library    OperatingSystem
-Library     ../libraries/smtp_library.py
+Library    ../libraries/smtp_library.py
 
 *** Keywords ***
 Connect Smtp Server
@@ -47,3 +47,6 @@ Check Maillog
     [Arguments]    ${HOST}    ${USER}    ${PASS}
     ${OUTPUT}=    Read Log File    ${HOST}    ${USER}    ${PASS}
     [Return]    ${OUTPUT}
+
+Check Logfile
+    [Arguments]    ${HOST}    ${USER}    ${PASS}
