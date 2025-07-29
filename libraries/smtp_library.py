@@ -1,14 +1,15 @@
-import smtplib
-import paramiko
-from email.MIMEText import MIMEText
-import socket
 import base64
+import paramiko
+import smtplib
+import socket
+from email.MIMEText import MIMEText
 from robot.api.deco import keyword
-import ssl
+
+from config.logger_config import setup_logger
 
 sock = None
 
-from config.logger_config import setup_logger
+
 
 
 def send_email_headers_only(sender, recipient, subject, server_ip, server_port):
@@ -134,7 +135,6 @@ def send_message_smtp(from_addr, to_addr, message, smtp_srv=smtplib.SMTP()):
         smtp_srv.quit()
 
 
-
 def read_recent_mail(username, password, host):
     session = paramiko.SSHClient()
     session.load_host_keys()
@@ -157,6 +157,12 @@ def read_log_file(host, username, password):
         'echo {} | sudo -S tail -n 6 /var/log/maillog'.format(password)
     )
     return stdout.read()
+
+
+def read_and_check_log_for_auth(host, username, password):
+    log = read_log_file(host, username, password)
+    if "sasl_method=" not in log:
+        raise AssertionError("AUTH log not found in maillog:\n" + log)
 
 @keyword
 def open_smtp_connection(host, port):
@@ -249,3 +255,21 @@ def form_simple_letter(text, from_addr, to_addr, subject = "Test message1"):
     mail["To"] = ",".join(to_addr)
     mail["Subject"] = subject
     return mail.as_string()
+
+def connect_and_login(host, port, username, password, use_tls=True):
+    try:
+        if use_tls:
+            server = smtplib.SMTP(host, port)
+            server.ehlo()
+            server.starttls()
+            server.ehlo()
+        else:
+            server = smtplib.SMTP_SSL(host, port)
+
+        server.login(username, password)
+        server.quit()
+        return "Login successful"
+    except smtplib.SMTPAuthenticationError as e:
+        raise Exception("Authentication failed: {e}")
+    except Exception as e:
+        raise Exception("Connection/Login failed: {e}")
