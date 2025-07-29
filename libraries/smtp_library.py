@@ -1,4 +1,6 @@
 import smtplib
+from sys import stderr
+
 import paramiko
 from email.MIMEText import MIMEText
 import socket
@@ -6,6 +8,8 @@ import base64
 from robot.api.deco import keyword
 import ssl
 
+import os
+from dotenv import load_dotenv
 sock = None
 
 from config.logger_config import setup_logger
