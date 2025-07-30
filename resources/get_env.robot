@@ -26,25 +26,6 @@ Load Environment Variables
     ${WRONG_ACCOUNT}=    Get Environment Variable    WRONG_ACCOUNT
     ${EHLO_DOMAIN}=    Get Environment Variable    EHLO_DOMAIN
 
-
-    ${IMAP_PORT}=    Get Environment Variable    IMAP_PORT
-    ${IMAP_PORT_INT}=    Evaluate    int(${IMAP_PORT})
-
-    ${USER}=    Get Environment Variable    SSH_USERNAME
-    ${PASS}=    Get Environment Variable    SSH_PASSWORD
-
-    ${IMAP_PORT}=    Get Environment Variable    IMAP_PORT
-    ${IMAP_PORT_INT}=    Evaluate    int(${IMAP_PORT})
-
-    ${USER}=    Get Environment Variable    SSH_USERNAME
-    ${PASS}=    Get Environment Variable    SSH_PASSWORD
-
-    ${USERNAME}=    Get Environment Variable    EMAIL_ACCOUNT
-    ${EMAIL_PASSWORD}=    Get Environment Variable    EMAIL_PASSWORD
-    ${WRONG_ACCOUNT}=    Get Environment Variable    WRONG_ACCOUNT
-    ${EHLO_DOMAIN}=    Get Environment Variable    EHLO_DOMAIN
-    
-
     ${TEST_USER}=    Get Environment Variable    TEST_USER
     ${TEST_PASS}=    Get Environment Variable    TEST_PASS
 
