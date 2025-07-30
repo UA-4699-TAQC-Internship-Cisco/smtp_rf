@@ -10,12 +10,13 @@ Load Environment Variables
     ${PORT_INT}=    Evaluate    int(${PORT})
     ${TLS_PORT}=    Get Environment Variable    TLS_PORT
     ${TLS_PORT_INT}=    Evaluate    int(${TLS_PORT})
+
     ${AUTH_PORT}=    Get Environment Variable    AUTH_PORT
     ${AUTH_PORT_INT}=    Evaluate    int(${AUTH_PORT})
     ${SSH_PORT}=    Get Environment Variable    SSH_PORT
     ${SSH_PORT_INT}=    Evaluate    int(${SSH_PORT})
-    ${IMAP_PORT}=    Get Environment Variable    IMAP_PORT    #ok
-    ${IMAP_PORT_INT}=    Evaluate    int(${IMAP_PORT})    #ok
+    ${IMAP_PORT}=    Get Environment Variable    IMAP_PORT
+    ${IMAP_PORT_INT}=    Evaluate    int(${IMAP_PORT})
 
     ${USER}=    Get Environment Variable    SSH_USERNAME
     ${PASS}=    Get Environment Variable    SSH_PASSWORD

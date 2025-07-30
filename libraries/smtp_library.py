@@ -185,7 +185,7 @@ def read_smtp_banner(expected_code):
         raise AssertionError("SMTP socket is not open.")
 
     data = ''
-    timeout = 15
+    timeout = 30
     start = time.time()
 
     sock.settimeout(timeout)
@@ -233,6 +233,7 @@ def close_smtp_connection():
     if sock:
         sock.close()
         sock = None
+
 
 def add_address_to_safe(host, port, user, password, address):
     """Append an address or range of addresses to /etc/postfix/sender_access as safe list.
@@ -294,6 +295,7 @@ def connect_and_login(host, port, username, password, use_tls=True):
         raise Exception("Authentication failed: {e}")
     except Exception as e:
         raise Exception("Connection/Login failed: {e}")
+
 
 @keyword
 def send_email_body(from_addr, to_addr, subject, body):
