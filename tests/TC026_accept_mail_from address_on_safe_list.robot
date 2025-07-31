@@ -26,7 +26,7 @@ TC026: Accept Email From Safe List
     Should Contain    ${ehlo_resp}    250
 
     # Step 4: MAIL FROM
-    Send Smtp Command    MAIL FROM:<trusted@example.com>
+    Send Smtp Command    MAIL FROM:<trusted@email.com>
     ${mail_resp}=    Read Smtp Banner    250
     Should Contain    ${mail_resp}    250
 
